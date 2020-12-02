@@ -22,6 +22,14 @@ public class MooreGraph {
         nodes.remove(node);
     }
 
+    public void addEdge(MooreEdge edge) {
+        edges.add(edge);
+    }
+
+    public void removeEdge(MooreEdge edge) {
+        edges.remove(edge);
+    }
+
     public ArrayList<MooreNode> getNodes() {
         return new ArrayList<MooreNode>(nodes);
     }

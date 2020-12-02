@@ -28,9 +28,51 @@ class Edge {
         this.endNode = endNode;
     }
 
+    protected int[] getStartPoint() {
+
+        int sx = startNode.getX();
+        int sy = startNode.getY();
+        int ex = endNode.getX();
+        int ey = endNode.getY();
+
+        int xDiff = sx - ex;
+        int yDiff = sy - ey;
+
+        int r = startNode.getR();
+
+        double dist = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+
+        int x = (int) (sx - (r * xDiff) / dist);
+        int y = (int) (sy - (r * yDiff) / dist);
+
+        int[] point = {x, y};
+        return point;
+    }
+
+    protected int[] getEndPoint() {
+
+        int sx = startNode.getX();
+        int sy = startNode.getY();
+        int ex = endNode.getX();
+        int ey = endNode.getY();
+
+        int xDiff = ex-sx;
+        int yDiff = ey-sy;
+
+        int r = endNode.getR();
+
+        double dist = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+
+        int x = (int) (ex - (r * xDiff) / dist);
+        int y = (int) (ey - (r * yDiff) / dist);
+
+        int[] point = {x, y};
+        return point;
+    }
+
     void draw(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawLine(startNode.getX(), startNode.getY(), endNode.getX(), endNode.getY());
+		g.drawLine(getStartPoint()[0], getStartPoint()[1], getEndPoint()[0],  getEndPoint()[1]);
     }
     
     @Override
