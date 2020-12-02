@@ -34,9 +34,8 @@ public class MooreNode extends Node {
 	@Override
 	void draw(Graphics g) {
 		super.draw(g);
-
 		Font font = new Font("TimesRoman", Font.BOLD, r/2);
-		drawCenteredText(g, state, output,  font, x, y);
+		drawCenteredText(g, state, output,  font, (int) x, (int) y);
 	}
 
 	public void drawCenteredText(Graphics g, String state, String output,Font font, int x, int y) {

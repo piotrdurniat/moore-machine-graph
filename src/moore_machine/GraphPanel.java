@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.Cursor;
 
 public class GraphPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
 
@@ -18,10 +19,14 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   private int translateX = 0;
   private int translateY = 0;
   private double scale = 1;
+  private double minScale = 0.1;
   private int mouseX = 0;
   private int mouseY = 0;
   private boolean mouseButtonLeft = false;
   private boolean mouseButtonRight = false;
+
+  private Node nodeUnderCursor = null;
+  private int mouseCursor = Cursor.DEFAULT_CURSOR;
 
   GraphPanel() {
     addMouseListener(this);
@@ -50,15 +55,9 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     Graphics2D g2d = (Graphics2D) g;
 
-    // Translate to the center in order to scale wiew from the middle
-    g.translate(this.getWidth() / 2, this.getHeight() / 2);
-    g2d.scale(scale, scale);
-    g.translate(-this.getWidth() / 2, -this.getHeight() / 2);
-
     g.translate(translateX, translateY);
+    g2d.scale(scale, scale);
     graph.draw(g);
-
-
   }
 
   private void translateView(int x, int y) {
@@ -68,20 +67,33 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
   private void scaleView(double scaleChange) {
     scale += scaleChange;
+    if (scale < minScale) {
+      scale = minScale;
+    }
+  }
+
+  private void setMouseCursor() {
+    if (nodeUnderCursor != null) {
+      mouseCursor = Cursor.HAND_CURSOR;
+    } else if (mouseButtonLeft) {
+      mouseCursor = Cursor.MOVE_CURSOR;
+    } else {
+      mouseCursor = Cursor.DEFAULT_CURSOR;
+    }
+    setCursor(Cursor.getPredefinedCursor(mouseCursor));
   }
 
   @Override
   public void keyPressed(KeyEvent event) {
 
     int transSpeed;
-    double scaleSpeed = 0.05;
+    double scaleSpeed = 0.02;
 
     if (event.isShiftDown()) {
       transSpeed = 10;
     } else {
       transSpeed = 1;
     }
-    System.out.println(event.getKeyCode());
     switch (event.getKeyCode()) {
       case KeyEvent.VK_LEFT:
         translateView(-transSpeed, 0);
@@ -102,7 +114,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
       case KeyEvent.VK_EQUALS:
         scaleView(scaleSpeed);
         break;
-
     }
 
     repaint();
@@ -123,9 +134,19 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   @Override
   public void mouseDragged(MouseEvent event) {
     if (mouseButtonLeft) {
+
       int diffX = event.getX() - mouseX;
       int diffY = event.getY() - mouseY;
-      translateView(diffX, diffY);
+
+      if (nodeUnderCursor != null) {
+
+        double x = (diffX / scale);
+        double y = (diffY / scale);
+
+        nodeUnderCursor.move(x, y);
+      } else {
+        translateView(diffX, diffY);
+      }
     }
     mouseX = event.getX();
     mouseY = event.getY();
@@ -133,10 +154,24 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     repaint();
   }
 
-  @Override
-  public void mouseMoved(MouseEvent arg0) {
-    // TODO Auto-generated method stub
+  private Node findNode(int mouseX, int mouseY) {
 
+    for (Node node : graph.getNodes()) {
+
+      int x = (int) ((mouseX - translateX) / scale);
+      int y = (int) ((mouseY - translateY) / scale);
+
+      if (node.isMouseOver(x, y)) {
+        return node;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public void mouseMoved(MouseEvent event) {
+    nodeUnderCursor = findNode(event.getX(), event.getY());
+    setMouseCursor();
   }
 
   @Override
@@ -164,8 +199,8 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     if (event.getButton() == 3)
       mouseButtonRight = true;
 
-      mouseX = event.getX();
-      mouseY = event.getY();
+    mouseX = event.getX();
+    mouseY = event.getY();
   }
 
   @Override
@@ -175,8 +210,8 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     if (event.getButton() == 3)
       mouseButtonRight = false;
 
-      mouseX = event.getX();
-      mouseY = event.getY();
+    mouseX = event.getX();
+    mouseY = event.getY();
   }
 
   @Override

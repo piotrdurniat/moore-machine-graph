@@ -30,54 +30,54 @@ class Edge {
 
     protected int[] getStartPoint() {
 
-        int sx = startNode.getX();
-        int sy = startNode.getY();
-        int ex = endNode.getX();
-        int ey = endNode.getY();
+        double sx = startNode.getX();
+        double sy = startNode.getY();
+        double ex = endNode.getX();
+        double ey = endNode.getY();
 
-        int xDiff = sx - ex;
-        int yDiff = sy - ey;
+        double xDiff = sx - ex;
+        double yDiff = sy - ey;
 
         int r = startNode.getR();
 
-        double dist = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+        double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 
         int x = (int) (sx - (r * xDiff) / dist);
         int y = (int) (sy - (r * yDiff) / dist);
 
-        int[] point = {x, y};
+        int[] point = { x, y };
         return point;
     }
 
     protected int[] getEndPoint() {
 
-        int sx = startNode.getX();
-        int sy = startNode.getY();
-        int ex = endNode.getX();
-        int ey = endNode.getY();
+        double sx = startNode.getX();
+        double sy = startNode.getY();
+        double ex = endNode.getX();
+        double ey = endNode.getY();
 
-        int xDiff = ex-sx;
-        int yDiff = ey-sy;
+        double xDiff = ex - sx;
+        double yDiff = ey - sy;
 
         int r = endNode.getR();
 
-        double dist = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+        double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 
         int x = (int) (ex - (r * xDiff) / dist);
         int y = (int) (ey - (r * yDiff) / dist);
 
-        int[] point = {x, y};
+        int[] point = { x, y };
         return point;
     }
 
     void draw(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.drawLine(getStartPoint()[0], getStartPoint()[1], getEndPoint()[0],  getEndPoint()[1]);
+        g.setColor(Color.BLACK);
+        g.drawLine(getStartPoint()[0], getStartPoint()[1], getEndPoint()[0], getEndPoint()[1]);
     }
-    
+
     @Override
-	public String toString() {
-		return startNode + "-" + endNode;
-	}
+    public String toString() {
+        return startNode + "-" + endNode;
+    }
 
 }

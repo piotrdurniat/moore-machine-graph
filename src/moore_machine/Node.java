@@ -5,28 +5,28 @@ import java.awt.Graphics;
 
 public class Node {
 
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 	protected int r = 40;
 
-	public Node(int x, int y) {
+	public Node(double x, double y) {
 		setX(x);
 		setY(y);
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
@@ -38,13 +38,18 @@ public class Node {
 		this.r = r;
 	}
 
+	public void move(double dx, double dy) {
+		setX(x + dx);
+		setY(y + dy);
+	}
+
 	public boolean isMouseOver(int mx, int my) {
 		return (x - mx) * (x - mx) + (y - my) * (y - my) <= r * r;
 	}
 
 	void draw(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawOval(x - r, y - r, 2 * r, 2 * r);
+		g.drawOval((int) x - r, (int) y - r, 2 * r, 2 * r);
 	}
 
 	@Override
