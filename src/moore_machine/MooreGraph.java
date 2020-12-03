@@ -43,6 +43,10 @@ public class MooreGraph {
         return new ArrayList<MooreNode>(nodes);
     }
 
+    public ArrayList<MooreEdge> getEdges() {
+        return new ArrayList<MooreEdge>(edges);
+    }
+
     public void draw(Graphics g) {
         for (MooreEdge edge : edges) {
             edge.draw(g);

@@ -31,6 +31,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   private boolean mouseButtonRight = false;
 
   private MooreNode nodeUnderCursor = null;
+  private MooreEdge edgeUnderCursor = null;
   private int mouseCursor = Cursor.DEFAULT_CURSOR;
 
   private EdgeEditor edgeEditor;
@@ -87,6 +88,31 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     popup.add(deleteNodeMenuItem);
 
     popup.show(event.getComponent(), event.getX(), event.getY());
+  }
+
+  protected void showEdgePopupMenu(MouseEvent event, MooreEdge edge) {
+    JPopupMenu popup = new JPopupMenu();
+    JMenuItem editInputMenuItem = new JMenuItem("Edit input value");
+    JMenuItem deleteEdgeMenuItem = new JMenuItem("Delete edge");
+
+    editInputMenuItem.addActionListener(e -> editEdgeInput(edge));
+    deleteEdgeMenuItem.addActionListener(e -> removeEdge(edge));
+
+    popup.add(editInputMenuItem);
+    popup.add(deleteEdgeMenuItem);
+
+    popup.show(event.getComponent(), event.getX(), event.getY());
+  }
+
+  private void editEdgeInput(MooreEdge edge) {
+    String newInput = JOptionPane.showInputDialog("Enter new state value:");
+    edge.setInput(newInput);
+    repaint();
+  }
+
+  private void removeEdge(MooreEdge edge) {
+    graph.removeEdge(edge);
+    repaint();
   }
 
   private void editNodeState(MooreNode node) {
@@ -157,7 +183,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   }
 
   private void setMouseCursor() {
-    if (nodeUnderCursor != null) {
+    if (nodeUnderCursor != null || edgeUnderCursor != null) {
       mouseCursor = Cursor.HAND_CURSOR;
     } else if (mouseButtonLeft) {
       mouseCursor = Cursor.MOVE_CURSOR;
@@ -257,9 +283,25 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     return null;
   }
 
+  private MooreEdge findEdge(int mouseX, int mouseY) {
+
+    for (MooreEdge edge : graph.getEdges()) {
+
+      int x = (int) ((mouseX - translateX) / scale);
+      int y = (int) ((mouseY - translateY) / scale);
+
+      if (edge.isMouseOver(x, y)) {
+        return edge;
+      }
+    }
+    return null;
+  }
+
   @Override
   public void mouseMoved(MouseEvent event) {
     nodeUnderCursor = findNode(event.getX(), event.getY());
+    edgeUnderCursor = findEdge(event.getX(), event.getY());
+
     setMouseCursor();
     repaint();
   }
@@ -305,7 +347,9 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     if (event.getButton() == 3) {
       if (nodeUnderCursor != null) {
         showNodePopupMenu(event, nodeUnderCursor);
-      } else {
+      } else if (edgeUnderCursor != null) {
+       showEdgePopupMenu(event, edgeUnderCursor); 
+      }else {
         showGlobalPopupMenu(event);
       }
     }
