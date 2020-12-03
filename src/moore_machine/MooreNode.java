@@ -34,14 +34,14 @@ public class MooreNode extends Node {
 	@Override
 	void draw(Graphics g) {
 		super.draw(g);
-		Font font = new Font("TimesRoman", Font.BOLD, r/2);
-		drawCenteredText(g, state, output,  font, (int) x, (int) y);
+		Font font = new Font("TimesRoman", Font.BOLD, r / 2);
+		drawCenteredText(g, state, output, font, (int) x, (int) y);
 	}
 
-	public void drawCenteredText(Graphics g, String state, String output,Font font, int x, int y) {
+	public void drawCenteredText(Graphics g, String state, String output, Font font, int x, int y) {
 		FontMetrics metrics = g.getFontMetrics(font);
 		int textX = x - metrics.stringWidth(state) / 2;
-		int textY = y  - metrics.getAscent() / 2;
+		int textY = y - metrics.getAscent() / 2;
 		g.setFont(font);
 		g.drawString(state, textX, textY);
 

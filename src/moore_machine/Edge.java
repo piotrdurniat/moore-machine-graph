@@ -96,12 +96,12 @@ class Edge {
     private double dist(double x1, double y1, double x2, double y2) {
         double xDiff = x1 - x2;
         double yDiff = y1 - y2;
-        return  Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+        return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 
     void draw(Graphics g) {
         g.setColor(Color.BLACK);
-        g.drawLine((int)getStartPoint()[0], (int)getStartPoint()[1], (int)getEndPoint()[0], (int)getEndPoint()[1]);
+        g.drawLine((int) getStartPoint()[0], (int) getStartPoint()[1], (int) getEndPoint()[0], (int) getEndPoint()[1]);
     }
 
     @Override
