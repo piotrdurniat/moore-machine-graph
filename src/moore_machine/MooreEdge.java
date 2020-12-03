@@ -3,7 +3,6 @@ package moore_machine;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Color;
-
 import java.awt.FontMetrics;
 
 public class MooreEdge extends Edge {

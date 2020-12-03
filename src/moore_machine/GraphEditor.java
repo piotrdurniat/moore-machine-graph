@@ -1,24 +1,41 @@
 package moore_machine;
 
-import javax.swing.JFrame;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
+
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 public class GraphEditor extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static final String APP_TITLE = "Moore machine graph editor";
 	private static final String APP_AUTHOR = "Autor: Piotr Durniat\n  Data: grudzień 2020";
-	private static final String APP_INSTRUCTION = "                  APP INSTRUCTIONS \n\n" + "Active keys:\n"
-			+ "   arrow keys   --> translate view\n" + "   +/=   --> zoom in\n" + "   -/_   --> zoom out\n"
-			+ "   SHIFT + arrow keys   --> translate view faster\n" + "   E   -> create new Edge\n\n"
-			+ "When mouse cursor is over a node:\n" + "   DEL   --> delete node\n\n" + "Mouse actions:\n"
-			+ "   Left button drag --> translate view\n" + "   Scroll wheel --> scale view\n"
-			+ "   Right click --> show options popup menu\n" + "When curson is over a node:\n"
-			+ "   Left button drag --> move node\n" + "   Right click --> show ndde options\n";
+	
+	// @formatter:off
+	private static final String APP_INSTRUCTION = "                  APP INSTRUCTIONS \n\n" 
+		+ "Active keys:\n"
+		+ "        Arrow keys           -   translate view\n" 
+		+ "        + / =                -   zoom in\n" 
+		+ "        - / _                -   zoom out\n"
+		+ "        SHIFT + Arrow keys   -   translate view faster\n" 
+		+ "        E                    -   create new Edge\n\n"
+		+ "Mouse actions:\n"
+		+ "        Left button drag     -   translate view\n" 
+		+ "        Scroll wheel         -   zoom in / zoom out\n"
+		+ "        Right click          -   show graph popup menu\n\n" 
+		+ "    When cursor is over a node:\n"
+		+ "        Left button drag     -   move node\n" 
+		+ "        Right click          -   show node popup menu\n\n"
+		+ "    When cursor is over an edge:\n" 
+		+ "        Left button drag     -   move edge\n"
+		+ "        Right click          -   show edge popup menu";
+
+	//@formatter:on
 
 	private static final int viewWidth = 800;
 	private static final int viewHeight = 800;
@@ -48,6 +65,9 @@ public class GraphEditor extends JFrame {
 		createMenu();
 		showBuiltInExample();
 		setVisible(true);
+
+		Font font = new Font("MonoSpaced", Font.BOLD, 12);
+		UIManager.put("OptionPane.messageFont", font);
 	}
 
 	private void createMenu() {

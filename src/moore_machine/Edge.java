@@ -12,7 +12,7 @@ class Edge {
     protected Node startNode;
     protected Node endNode;
 
-    protected int curveHeight = 50;
+    protected int curveHeight = 0;
 
     boolean mouseOver = false;
 
@@ -50,8 +50,9 @@ class Edge {
     }
 
     protected double[] getStartPoint() {
-        double sx = getPeakPos()[0];
-        double sy = getPeakPos()[1];
+        double[] s = getPeakPos();
+        double sx = s[0];
+        double sy = s[1];
         double ex = startNode.getX();
         double ey = startNode.getY();
 
@@ -59,8 +60,9 @@ class Edge {
     }
 
     protected double[] getEndPoint() {
-        double sx = getPeakPos()[0];
-        double sy = getPeakPos()[1];
+        double[] s = getPeakPos();
+        double sx = s[0];
+        double sy = s[1];
         double ex = endNode.getX();
         double ey = endNode.getY();
 
@@ -148,13 +150,16 @@ class Edge {
     void draw(Graphics g) {
         g.setColor(Color.BLACK);
 
-        int sx = (int) getStartPoint()[0];
-        int sy = (int) getStartPoint()[1];
-        int ex = (int) getEndPoint()[0];
-        int ey = (int) getEndPoint()[1];
+        double[] s = getStartPoint();
+        double[] e = getEndPoint();
+        double[] p = getPeakPos();
+        int sx = (int) s[0];
+        int sy = (int) s[1];
+        int ex = (int) e[0];
+        int ey = (int) e[1];
 
-        int px = (int) getPeakPos()[0];
-        int py = (int) getPeakPos()[1];
+        int px = (int) p[0];
+        int py = (int) p[1];
 
         drawArc(g, sx, sy, px, py, ex, ey);
         drawArrowHead(g, px, py, ex, ey);
@@ -184,10 +189,12 @@ class Edge {
     }
 
     protected Polygon enclosingRect() {
-        int sx = (int) getStartPoint()[0];
-        int sy = (int) getStartPoint()[1];
-        int ex = (int) getEndPoint()[0];
-        int ey = (int) getEndPoint()[1];
+        double[] s = getStartPoint();
+        double[] e = getEndPoint();
+        int sx = (int) s[0];
+        int sy = (int) s[1];
+        int ex = (int) e[0];
+        int ey = (int) e[1];
 
         int distY = curveHeight;
 

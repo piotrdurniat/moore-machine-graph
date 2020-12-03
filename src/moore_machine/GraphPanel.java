@@ -1,8 +1,5 @@
 package moore_machine;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,6 +14,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class GraphPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
 
@@ -28,7 +27,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     private int mouseX = 0;
     private int mouseY = 0;
     private boolean mouseButtonLeft = false;
-    private boolean mouseButtonRight = false;
 
     private MooreNode nodeUnderCursor = null;
     private MooreEdge edgeUnderCursor = null;
@@ -236,10 +234,11 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
                 translateView(0, transSpeed);
                 break;
             case KeyEvent.VK_UNDERSCORE:
-            case 45:
+            case KeyEvent.VK_MINUS:
                 scaleView(-scaleSpeed);
                 break;
             case KeyEvent.VK_EQUALS:
+            case KeyEvent.VK_PLUS:
                 scaleView(scaleSpeed);
                 break;
             case KeyEvent.VK_E:
@@ -340,8 +339,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     public void mousePressed(MouseEvent event) {
         if (event.getButton() == 1)
             mouseButtonLeft = true;
-        if (event.getButton() == 3)
-            mouseButtonRight = true;
 
         mouseX = event.getX();
         mouseY = event.getY();
@@ -352,8 +349,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     public void mouseReleased(MouseEvent event) {
         if (event.getButton() == 1)
             mouseButtonLeft = false;
-        if (event.getButton() == 3)
-            mouseButtonRight = false;
 
         mouseX = event.getX();
         mouseY = event.getY();
