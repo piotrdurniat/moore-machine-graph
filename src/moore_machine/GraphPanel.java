@@ -58,7 +58,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     JMenuItem addEdgeMenuItem = new JMenuItem("Create new edge");
 
     addNodeMenuItem.addActionListener(e -> createNewNode(event.getX(), event.getY()));
-    addEdgeMenuItem.addActionListener(e -> addNewEdge());
+    addEdgeMenuItem.addActionListener(e -> addNewEdge(null));
 
     popup.add(addNodeMenuItem);
     popup.add(addEdgeMenuItem);
@@ -78,14 +78,17 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     JMenuItem editStateMenuItem = new JMenuItem("Edit state value");
     JMenuItem editOutputMenuItem = new JMenuItem("Edit output value");
     JMenuItem deleteNodeMenuItem = new JMenuItem("Delete node");
+    JMenuItem addEdgeMenuItem = new JMenuItem("Create edge from this node");
 
     editStateMenuItem.addActionListener(e -> editNodeState(node));
     editOutputMenuItem.addActionListener(e -> editNodeOutput(node));
     deleteNodeMenuItem.addActionListener(e -> removeNode(node));
+    addEdgeMenuItem.addActionListener(e -> addNewEdge(node));
 
     popup.add(editStateMenuItem);
     popup.add(editOutputMenuItem);
     popup.add(deleteNodeMenuItem);
+    popup.add(addEdgeMenuItem);
 
     popup.show(event.getComponent(), event.getX(), event.getY());
   }
@@ -225,15 +228,15 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         scaleView(scaleSpeed);
         break;
       case KeyEvent.VK_E:
-        addNewEdge();
+        addNewEdge(null);
         break;
     }
 
     repaint();
   }
 
-  private void addNewEdge() {
-    edgeEditor.newEdge();
+  private void addNewEdge(MooreNode startNode) {
+    edgeEditor.newEdge(startNode);
   }
 
   @Override

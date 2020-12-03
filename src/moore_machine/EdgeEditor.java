@@ -60,10 +60,13 @@ public class EdgeEditor implements MouseMotionListener, MouseListener {
         }
     }
 
-    public void newEdge() {
+    public void newEdge(MooreNode startNode) {
         active = true;
         addMode = true;
         edge = new MooreEdge();
+        if (startNode != null) {
+            edge.setStartNode(startNode);
+        }
     }
 
     @Override
@@ -86,7 +89,6 @@ public class EdgeEditor implements MouseMotionListener, MouseListener {
         Node startNode = edge.getStartNode();
         Node endNode = edge.getEndNode();
 
-
         if (nodeUnderCursor == null)
             return;
 
@@ -98,8 +100,9 @@ public class EdgeEditor implements MouseMotionListener, MouseListener {
             edge.setInput(input);
 
             MooreGraph graph = panel.getGraph();
-            
-            if (addMode) graph.addEdge(edge);
+
+            if (addMode)
+                graph.addEdge(edge);
             panel.repaint();
             clearFields();
         }
