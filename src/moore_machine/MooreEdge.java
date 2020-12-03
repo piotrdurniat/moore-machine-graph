@@ -13,14 +13,14 @@ public class MooreEdge extends Edge {
 
     private String input;
 
-    private void drawArrowHead(Graphics g, int x1, int y1, int x2, int y2) {
+    private void drawArrowHead(Graphics g, double x1, double y1, double x2, double y2) {
+        Graphics2D g2d = (Graphics2D) g;
 
         Polygon arrowHead = new Polygon();
         arrowHead.addPoint(0, 5);
         arrowHead.addPoint(-5, -5);
         arrowHead.addPoint(5, -5);
 
-        Graphics2D g2d = (Graphics2D) g;
         double angle = Math.atan2(y2 - y1, x2 - x1);
         g2d.translate(x2, y2);
         g2d.rotate((angle - Math.PI / 2d));
@@ -68,17 +68,22 @@ public class MooreEdge extends Edge {
 
     }
 
+    public void move(double x, double y) {
+        startNode.move(x, y);
+        endNode.move(x, y);
+    }
+
     @Override
     void draw(Graphics g) {
         super.draw(g);
 
-        int[] startPoint = getStartPoint();
-        int[] endPoint = getEndPoint();
+        double[] startPoint = getStartPoint();
+        double[] endPoint = getEndPoint();
 
-        int x1 = startPoint[0];
-        int y1 = startPoint[1];
-        int x2 = endPoint[0];
-        int y2 = endPoint[1];
+        double x1 = startPoint[0];
+        double y1 = startPoint[1];
+        double x2 = endPoint[0];
+        double y2 = endPoint[1];
 
         drawArrowHead(g, x1, y1, x2, y2);
 

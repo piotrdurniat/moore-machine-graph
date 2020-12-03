@@ -255,13 +255,14 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
             int diffX = event.getX() - mouseX;
             int diffY = event.getY() - mouseY;
+            
+                            double x = (diffX / scale);
+                            double y = (diffY / scale);
 
             if (nodeUnderCursor != null) {
-
-                double x = (diffX / scale);
-                double y = (diffY / scale);
-
                 nodeUnderCursor.move(x, y);
+            } else if (edgeUnderCursor != null) {
+                edgeUnderCursor.move(x, y);
             } else {
                 translateView(diffX, diffY);
             }
