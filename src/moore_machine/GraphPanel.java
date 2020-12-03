@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.Color;
 import java.awt.Cursor;
 
 public class GraphPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
@@ -25,19 +26,42 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   private boolean mouseButtonLeft = false;
   private boolean mouseButtonRight = false;
 
-  private Node nodeUnderCursor = null;
+  private MooreNode nodeUnderCursor = null;
   private int mouseCursor = Cursor.DEFAULT_CURSOR;
 
+  private EdgeEditor edgeEditor;
+  protected MooreGraph graph;
+
   GraphPanel() {
+
+    edgeEditor = new EdgeEditor(this);
+
     addMouseListener(this);
+    addMouseListener(edgeEditor);
     addMouseMotionListener(this);
+    addMouseMotionListener(edgeEditor);
     addMouseWheelListener(this);
     addKeyListener(this);
     setFocusable(true);
     requestFocus();
+    setBackground(Color.WHITE);
   }
 
-  protected MooreGraph graph;
+  public double getScale() {
+    return scale;
+  }
+
+  public int getTranslateX() {
+    return translateX;
+  }
+
+  public int getTranslateY() {
+    return translateY;
+  }
+
+  public MooreNode getNodeUnderCursor() {
+    return nodeUnderCursor;
+  }
 
   public MooreGraph getGraph() {
     return graph;
@@ -50,6 +74,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+    edgeEditor.draw(g);
     if (graph == null)
       return;
 
@@ -114,6 +139,9 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
       case KeyEvent.VK_EQUALS:
         scaleView(scaleSpeed);
         break;
+      case KeyEvent.VK_E:
+        edgeEditor.newEdge();
+        break;
     }
 
     repaint();
@@ -121,13 +149,11 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
   @Override
   public void keyReleased(KeyEvent arg0) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void keyTyped(KeyEvent arg0) {
-    // TODO Auto-generated method stub
 
   }
 
@@ -154,9 +180,9 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     repaint();
   }
 
-  private Node findNode(int mouseX, int mouseY) {
+  private MooreNode findNode(int mouseX, int mouseY) {
 
-    for (Node node : graph.getNodes()) {
+    for (MooreNode node : graph.getNodes()) {
 
       int x = (int) ((mouseX - translateX) / scale);
       int y = (int) ((mouseY - translateY) / scale);
@@ -172,23 +198,21 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
   public void mouseMoved(MouseEvent event) {
     nodeUnderCursor = findNode(event.getX(), event.getY());
     setMouseCursor();
+    repaint();
   }
 
   @Override
   public void mouseClicked(MouseEvent arg0) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void mouseEntered(MouseEvent arg0) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void mouseExited(MouseEvent arg0) {
-    // TODO Auto-generated method stub
 
   }
 
@@ -201,6 +225,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     mouseX = event.getX();
     mouseY = event.getY();
+    setMouseCursor();
   }
 
   @Override
@@ -212,6 +237,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     mouseX = event.getX();
     mouseY = event.getY();
+    setMouseCursor();
   }
 
   @Override

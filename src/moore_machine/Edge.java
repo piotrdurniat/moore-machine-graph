@@ -12,6 +12,10 @@ class Edge {
         setEndNode(endNode);
     }
 
+    Edge() {
+        
+    }
+
     public Node getStartNode() {
         return startNode;
     }

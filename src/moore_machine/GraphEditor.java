@@ -27,10 +27,10 @@ public class GraphEditor extends JFrame {
     private void showBuiltInExample() {
 		MooreGraph graph = new MooreGraph();
 
-		MooreNode n1 = new MooreNode(100, 100, "oong state name", "y1");
-		MooreNode n2 = new MooreNode(100, 200, "q2", "y2");
-		MooreNode n3 = new MooreNode(200, 100, "q3", "y1");
-		MooreNode n4 = new MooreNode(200, 250, "q4", "y2");
+		MooreNode n1 = new MooreNode(100, 100, "q1", "y1");
+		MooreNode n2 = new MooreNode(100, 400, "q2", "y2");
+		MooreNode n3 = new MooreNode(400, 200, "q3", "y1");
+		MooreNode n4 = new MooreNode(400, 500, "q4", "y2");
 
 		MooreEdge e1 = new MooreEdge(n1, n2, "z1");
 		MooreEdge e2 = new MooreEdge(n2, n3, "z2");
