@@ -72,6 +72,40 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     repaint();
   }
 
+  protected void showNodePopupMenu(MouseEvent event, MooreNode node) {
+    JPopupMenu popup = new JPopupMenu();
+    JMenuItem editStateMenuItem = new JMenuItem("Edit state value");
+    JMenuItem editOutputMenuItem = new JMenuItem("Edit output value");
+    JMenuItem deleteNodeMenuItem = new JMenuItem("Delete node");
+
+    editStateMenuItem.addActionListener(e -> editNodeState(node));
+    editOutputMenuItem.addActionListener(e -> editNodeOutput(node));
+    deleteNodeMenuItem.addActionListener(e -> removeNode(node));
+
+    popup.add(editStateMenuItem);
+    popup.add(editOutputMenuItem);
+    popup.add(deleteNodeMenuItem);
+
+    popup.show(event.getComponent(), event.getX(), event.getY());
+  }
+
+  private void editNodeState(MooreNode node) {
+    String newState = JOptionPane.showInputDialog("Enter new state value:");
+    node.setState(newState);
+    repaint();
+  }
+
+  private void editNodeOutput(MooreNode node) {
+    String newOutput = JOptionPane.showInputDialog("Enter new output value:");
+    node.setOutput(newOutput);
+    repaint();
+  }
+
+  private void removeNode(MooreNode node) {
+    graph.removeNode(node);
+    repaint();
+  }
+
   public double getScale() {
     return scale;
   }
@@ -270,7 +304,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     if (event.getButton() == 3) {
       if (nodeUnderCursor != null) {
-        // showNodePopupMenu(event, nodeUnderCursor);
+        showNodePopupMenu(event, nodeUnderCursor);
       } else {
         showGlobalPopupMenu(event);
       }

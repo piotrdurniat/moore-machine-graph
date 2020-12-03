@@ -1,6 +1,7 @@
 package moore_machine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.awt.Graphics;
 
@@ -20,6 +21,14 @@ public class MooreGraph {
 
     public void removeNode(MooreNode node) {
         nodes.remove(node);
+
+        for (Iterator<MooreEdge> it = edges.iterator(); it.hasNext();) {
+            MooreEdge next = it.next();
+            if (next.startNode.equals(node) || next.endNode.equals(node)) {
+                it.remove();
+            }
+        }
+
     }
 
     public void addEdge(MooreEdge edge) {
