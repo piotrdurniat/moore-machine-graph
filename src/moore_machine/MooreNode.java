@@ -53,7 +53,7 @@ public class MooreNode extends Node {
 
 	@Override
 	public String toString() {
-		return ("(state: " + state + ", output: " + output + ")");
+		return ("(" + x + ", " + y + ", " + state + ", " + output + ")");
 	}
 
 }

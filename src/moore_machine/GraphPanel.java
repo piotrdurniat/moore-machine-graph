@@ -37,8 +37,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     private EdgeEditor edgeEditor;
     protected MooreGraph graph;
 
-    GraphPanel() {
-
+    GraphPanel(int tx, int ty) {
         edgeEditor = new EdgeEditor(this);
 
         addMouseListener(this);
@@ -50,6 +49,11 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         setFocusable(true);
         requestFocus();
         setBackground(Color.WHITE);
+
+        translateX = tx;
+        translateY = ty;
+
+        System.out.println(getWidth());
     }
 
     protected void showGlobalPopupMenu(MouseEvent event) {
@@ -65,9 +69,11 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         popup.show(event.getComponent(), event.getX(), event.getY());
     }
 
-    public void createNewNode(int x, int y) {
+    public void createNewNode(int mx, int my) {
         String state = JOptionPane.showInputDialog("Enter node state value:");
         String output = JOptionPane.showInputDialog("Enter node output value:");
+        int x = (int) ((mx - translateX) / scale);
+        int y = (int) ((my - translateY) / scale);
         MooreNode newNode = new MooreNode(x, y, state, output);
         graph.addNode(newNode);
         repaint();
@@ -97,14 +103,24 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         JPopupMenu popup = new JPopupMenu();
         JMenuItem editInputMenuItem = new JMenuItem("Edit input value");
         JMenuItem deleteEdgeMenuItem = new JMenuItem("Delete edge");
+        JMenuItem curveMenuItem = new JMenuItem("Edit curve height");
 
         editInputMenuItem.addActionListener(e -> editEdgeInput(edge));
         deleteEdgeMenuItem.addActionListener(e -> removeEdge(edge));
+        curveMenuItem.addActionListener(e -> editCurveHeight(edge));
 
         popup.add(editInputMenuItem);
         popup.add(deleteEdgeMenuItem);
+        popup.add(curveMenuItem);
 
         popup.show(event.getComponent(), event.getX(), event.getY());
+    }
+
+    private void editCurveHeight(MooreEdge edge) {
+        int height = Integer
+                .parseInt(JOptionPane.showInputDialog(null, "Enter new curve height:", edge.getCurveHeight()));
+        edge.setCurveHeight(height);
+        repaint();
     }
 
     private void editEdgeInput(MooreEdge edge) {
@@ -198,7 +214,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void keyPressed(KeyEvent event) {
-
         int transSpeed;
         double scaleSpeed = 0.02;
 
@@ -231,7 +246,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
                 addNewEdge(null);
                 break;
         }
-
         repaint();
     }
 
@@ -274,7 +288,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     private MooreNode findNode(int mouseX, int mouseY) {
-
         for (MooreNode node : graph.getNodes()) {
 
             int x = (int) ((mouseX - translateX) / scale);
@@ -288,7 +301,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     private MooreEdge findEdge(int mouseX, int mouseY) {
-
         for (MooreEdge edge : graph.getEdges()) {
 
             int x = (int) ((mouseX - translateX) / scale);
@@ -305,7 +317,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent event) {
         nodeUnderCursor = findNode(event.getX(), event.getY());
         edgeUnderCursor = findEdge(event.getX(), event.getY());
-
         setMouseCursor();
         repaint();
     }
@@ -364,5 +375,13 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         double scaleSpeed = 0.1;
         scaleView(scaleSpeed * event.getPreciseWheelRotation());
         repaint();
+    }
+
+    String getEdgeList() {
+        return graph.getEdgeList();
+    }
+
+    String getNodeList() {
+        return graph.getNodeList();
     }
 }

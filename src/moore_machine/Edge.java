@@ -12,7 +12,7 @@ class Edge {
     protected Node startNode;
     protected Node endNode;
 
-    protected int height = 100;
+    protected int curveHeight = 50;
 
     boolean mouseOver = false;
 
@@ -23,6 +23,14 @@ class Edge {
 
     Edge() {
 
+    }
+
+    public int getCurveHeight() {
+        return curveHeight;
+    }
+
+    public void setCurveHeight(int height) {
+        curveHeight = height;
     }
 
     public Node getStartNode() {
@@ -99,8 +107,8 @@ class Edge {
 
         double[] middle = getMiddlePoint(sx, sy, ex, ey);
 
-        double peakX = middle[0] + height * Math.cos(angle - Math.PI / 2);
-        double peakY = middle[1] + height * Math.sin(angle - Math.PI / 2);
+        double peakX = middle[0] + curveHeight * Math.cos(angle - Math.PI / 2);
+        double peakY = middle[1] + curveHeight * Math.sin(angle - Math.PI / 2);
 
         double[] peak = { peakX, peakY };
         return peak;
@@ -109,7 +117,7 @@ class Edge {
     protected double[] getMiddlePoint(double sx, double sy, double ex, double ey) {
         double middleX = (sx + ex) / 2;
         double middleY = (sy + ey) / 2;
-        double[] middle = {middleX, middleY};
+        double[] middle = { middleX, middleY };
         return middle;
     }
 
@@ -150,17 +158,17 @@ class Edge {
 
         drawArc(g, sx, sy, px, py, ex, ey);
         drawArrowHead(g, px, py, ex, ey);
-        g.drawOval(px, py, 10, 10);
 
         drawEnclosingRect(g);
     }
 
     protected void drawEnclosingRect(Graphics g) {
-        if(!mouseOver) return;
-    
+        if (!mouseOver)
+            return;
+
         Graphics2D g2d = (Graphics2D) g;
 
-        Stroke dashed = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+        Stroke dashed = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
         g2d.setStroke(dashed);
         g.setColor(Color.RED);
 
@@ -172,7 +180,7 @@ class Edge {
 
     @Override
     public String toString() {
-        return startNode + "-" + endNode;
+        return startNode + "  ->  " + endNode;
     }
 
     protected Polygon enclosingRect() {
@@ -181,9 +189,7 @@ class Edge {
         int ex = (int) getEndPoint()[0];
         int ey = (int) getEndPoint()[1];
 
-        double[] m = getMiddlePoint(sx, sy, ex, ey);
-        double[] p = getPeakPos();
-        int distY = (int) dist(m[0], m[1], p[0], p[1]);
+        int distY = curveHeight;
 
         Polygon rect = new Polygon();
 
@@ -193,7 +199,7 @@ class Edge {
         rect.addPoint(ex, ey);
 
         int diffX = (int) (Math.cos(angle - Math.PI / 2) * distY);
-        int diffY = (int) (Math.sin(angle - Math.PI /2) * distY);
+        int diffY = (int) (Math.sin(angle - Math.PI / 2) * distY);
 
         rect.addPoint(ex + diffX, ey + diffY);
         rect.addPoint(sx + diffX, sy + diffY);
@@ -203,18 +209,21 @@ class Edge {
     boolean isMouseOver(int mx, int my) {
         Polygon rect = enclosingRect();
 
-        if(rect.contains(mx, my)) {
-            mouseOver = true;
-            return true;
+        if (Math.abs(curveHeight) <= 3) {
+            double sx = startNode.getX();
+            double sy = startNode.getY();
+            double ex = endNode.getX();
+            double ey = endNode.getY();
+            mouseOver = linePoint(sx, sy, ex, ey, mx, my);
+        } else {
+            mouseOver = rect.contains(mx, my);
         }
-        mouseOver = false;
-        return false;
+        return mouseOver;
     }
 
     public void move(double x, double y) {
         startNode.move(x, y);
         endNode.move(x, y);
     }
-
 
 }

@@ -15,13 +15,14 @@ public class GraphEditor extends JFrame {
 	private static final String APP_INSTRUCTION = "                  APP INSTRUCTIONS \n\n" + "Active keys:\n"
 			+ "   arrow keys   --> translate view\n" + "   +/=   --> zoom in\n" + "   -/_   --> zoom out\n"
 			+ "   SHIFT + arrow keys   --> translate view faster\n" + "   E   -> create new Edge\n\n"
-			+ "When mouse cursor is over a node:\n" + "   DEL   --> delete node\n" + "   +/=   --> increse node size\n"
-			+ "   -/_   --> decrese node size\n\n" + "Mouse actions:\n" + "   Left button drag --> translate view\n"
-			+ "   Scroll wheel --> scale view\n" + "   Right click --> show options popup menu\n"
-			+ "When curson is over a node:\n" + "   Left button drag --> move node\n"
-			+ "   Right click --> delete node\n";
+			+ "When mouse cursor is over a node:\n" + "   DEL   --> delete node\n\n" + "Mouse actions:\n"
+			+ "   Left button drag --> translate view\n" + "   Scroll wheel --> scale view\n"
+			+ "   Right click --> show options popup menu\n" + "When curson is over a node:\n"
+			+ "   Left button drag --> move node\n" + "   Right click --> show ndde options\n";
 
-	private GraphPanel panel = new GraphPanel();
+	private static final int viewWidth = 800;
+	private static final int viewHeight = 800;
+	private GraphPanel panel = new GraphPanel(viewWidth / 2, viewHeight / 2);
 
 	public static void main(String[] args) {
 		new GraphEditor();
@@ -41,7 +42,7 @@ public class GraphEditor extends JFrame {
 	GraphEditor() {
 		super(APP_TITLE);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 800);
+		setSize(viewWidth, viewHeight);
 		setLocationRelativeTo(null);
 		setContentPane(panel);
 		createMenu();
@@ -63,6 +64,7 @@ public class GraphEditor extends JFrame {
 		menuGraph.add(menuShowExample);
 		menuGraph.addSeparator();
 		menuGraph.add(menuNodeList);
+		menuGraph.add(menuEdgeList);
 		menuGraph.addSeparator();
 		menuGraph.add(menuExit);
 
@@ -80,13 +82,13 @@ public class GraphEditor extends JFrame {
 	}
 
 	private void showNodeList() {
-		// TODO - edge liset
-		System.out.println("Show list of nodes");
+		String nodeList = panel.getNodeList();
+		JOptionPane.showMessageDialog(this, nodeList);
 	}
 
 	private void showEdgeList() {
-		// TODO - node list
-		System.out.println("Edge list");
+		String edgeList = panel.getEdgeList();
+		JOptionPane.showMessageDialog(this, edgeList);
 	}
 
 	private void showAuthor() {
@@ -100,22 +102,41 @@ public class GraphEditor extends JFrame {
 	private void showBuiltInExample() {
 		MooreGraph graph = new MooreGraph();
 
-		MooreNode n1 = new MooreNode(100, 100, "q1", "y1");
-		MooreNode n2 = new MooreNode(100, 400, "q2", "y2");
-		MooreNode n3 = new MooreNode(400, 200, "q3", "y1");
-		MooreNode n4 = new MooreNode(400, 500, "q4", "y2");
+		MooreNode q0 = new MooreNode(-260, 0, "q0", "y0");
+		MooreNode q1 = new MooreNode(-20, -140, "q1", "y1");
+		MooreNode q2 = new MooreNode(-20, 140, "q2", "y1");
+		MooreNode q3 = new MooreNode(260, -140, "q3", "y1");
+		MooreNode q4 = new MooreNode(260, 140, "q4", "y1");
 
-		MooreEdge e1 = new MooreEdge(n1, n2, "z1");
-		MooreEdge e2 = new MooreEdge(n2, n3, "z2");
+		MooreEdge e1 = new MooreEdge(q0, q1, "z1", 0);
+		MooreEdge e2 = new MooreEdge(q0, q2, "z0", 0);
+		MooreEdge e3 = new MooreEdge(q1, q3, "z1", 50);
+		MooreEdge e4 = new MooreEdge(q1, q3, "z0", -50);
+		MooreEdge e5 = new MooreEdge(q3, q4, "z1", 0);
+		MooreEdge e6 = new MooreEdge(q4, q2, "z0", 0);
+		MooreEdge e7 = new MooreEdge(q2, q3, "z0", 50);
+		MooreEdge e8 = new MooreEdge(q3, q2, "z0", 50);
+		MooreEdge e9 = new MooreEdge(q2, q1, "z1", 0);
+		MooreEdge e10 = new MooreEdge(q4, q1, "z1", 0);
 
-		graph.addNode(n1);
-		graph.addNode(n2);
-		graph.addNode(n3);
-		graph.addNode(n4);
+		graph.addNode(q0);
+		graph.addNode(q1);
+		graph.addNode(q2);
+		graph.addNode(q3);
+		graph.addNode(q4);
 
 		graph.addEdge(e1);
 		graph.addEdge(e2);
+		graph.addEdge(e3);
+		graph.addEdge(e4);
+		graph.addEdge(e5);
+		graph.addEdge(e6);
+		graph.addEdge(e7);
+		graph.addEdge(e8);
+		graph.addEdge(e9);
+		graph.addEdge(e10);
 
 		panel.setGraph(graph);
 	}
+
 }

@@ -56,4 +56,20 @@ public class MooreGraph {
         }
     }
 
+    String getEdgeList() {
+        String list = "";
+        for (MooreEdge edge : edges) {
+            list += edge + "\n";
+        }
+        return list;
+    }
+
+    String getNodeList() {
+        String list = "";
+        for (MooreNode node : nodes) {
+            list += node + "\n";
+        }
+        return list;
+    }
+
 }

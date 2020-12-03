@@ -2,12 +2,16 @@ package moore_machine;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.Stroke;
 
 public class Node {
 
 	protected double x;
 	protected double y;
 	protected int r = 40;
+	boolean mouseOver;
 
 	public Node(double x, double y) {
 		setX(x);
@@ -44,11 +48,21 @@ public class Node {
 	}
 
 	public boolean isMouseOver(int mx, int my) {
-		return (x - mx) * (x - mx) + (y - my) * (y - my) <= r * r;
+		mouseOver = (x - mx) * (x - mx) + (y - my) * (y - my) <= r * r;
+		return mouseOver;
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.BLACK);
+		Graphics2D g2d = (Graphics2D) g;
+		if (mouseOver) {
+			Stroke dashed = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+			g2d.setStroke(dashed);
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.BLACK);
+			g2d.setStroke(new BasicStroke());
+		}
+
 		g.drawOval((int) x - r, (int) y - r, 2 * r, 2 * r);
 	}
 

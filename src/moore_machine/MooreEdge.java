@@ -10,9 +10,14 @@ public class MooreEdge extends Edge {
 
     private String input;
 
+    MooreEdge(MooreNode startNode, MooreNode endNode, String input, int curveHeight) {
+        this(startNode, endNode, input);
+        setCurveHeight(curveHeight);
+    }
+
     MooreEdge(MooreNode startNode, MooreNode endNode, String input) {
         super(startNode, endNode);
-        this.input = input;
+        setInput(input);
     }
 
     MooreEdge() {
@@ -44,6 +49,6 @@ public class MooreEdge extends Edge {
 
     @Override
     public String toString() {
-        return startNode + "- " + input + " ->" + endNode;
+        return startNode + "  - " + input + " ->  " + endNode + ", " + curveHeight;
     }
 }
