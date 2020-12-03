@@ -1,3 +1,11 @@
+/*
+ *  Application for editing and graphical visualization of Moore Machine Graphs
+ * 
+ *  Author: Piotr Durniat
+ *  Date: 03.12.2020
+ *  Group: E03-11f
+ */
+
 package moore_machine;
 
 import javax.swing.JMenuItem;

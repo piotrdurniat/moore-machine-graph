@@ -1,3 +1,11 @@
+/*
+ *  Application for editing and graphical visualization of Moore Machine Graphs
+ * 
+ *  Author: Piotr Durniat
+ *  Date: 03.12.2020
+ *  Group: E03-11f
+ */
+
 package moore_machine;
 
 import java.awt.Font;
@@ -25,6 +33,7 @@ public class GraphEditor extends JFrame {
 		+ "        SHIFT + Arrow keys   -   translate view faster\n" 
 		+ "        E                    -   create new Edge\n\n"
 		+ "Mouse actions:\n"
+		+ "    When cursor is over the canvas:\n"
 		+ "        Left button drag     -   translate view\n" 
 		+ "        Scroll wheel         -   zoom in / zoom out\n"
 		+ "        Right click          -   show graph popup menu\n\n" 
