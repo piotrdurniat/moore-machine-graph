@@ -11,10 +11,20 @@ package moore_machine;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class MooreGraph {
+public class MooreGraph implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private List<MooreNode> nodes;
     private List<MooreEdge> edges;
 
@@ -79,5 +89,25 @@ public class MooreGraph {
         }
         return list;
     }
+
+    public static void serialize(String fileName, MooreGraph graph) {
+		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+			outputStream.writeObject(graph);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
+		}
+	}
+
+	public static MooreGraph deserialize(String fileName) {
+		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+			return (MooreGraph) inputStream.readObject();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
+		} catch (ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
+        }
+        return null;
+	}
+
 
 }

@@ -15,6 +15,7 @@ import java.awt.FontMetrics;
 
 public class MooreEdge extends Edge {
 
+    private static final long serialVersionUID = 1L;
     private String input;
 
     MooreEdge(MooreNode startNode, MooreNode endNode, String input, int curveHeight) {

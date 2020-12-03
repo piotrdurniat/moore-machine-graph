@@ -10,20 +10,23 @@ package moore_machine;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GraphEditor extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static final String APP_TITLE = "Moore machine graph editor";
 	private static final String APP_AUTHOR = "Autor: Piotr Durniat\n  Data: grudzień 2020";
-	
+
 	// @formatter:off
 	private static final String APP_INSTRUCTION = "                  APP INSTRUCTIONS \n\n" 
 		+ "Active keys:\n"
@@ -64,6 +67,8 @@ public class GraphEditor extends JFrame {
 	private JMenuItem menuEdgeList = new JMenuItem("List of Edges");
 	private JMenuItem menuAuthor = new JMenuItem("Author", KeyEvent.VK_A);
 	private JMenuItem menuInstruction = new JMenuItem("Instruction", KeyEvent.VK_I);
+	private JMenuItem menuSave = new JMenuItem("Save to file", KeyEvent.VK_S);
+	private JMenuItem menuLoad = new JMenuItem("Load from file", KeyEvent.VK_L);
 
 	GraphEditor() {
 		super(APP_TITLE);
@@ -88,6 +93,9 @@ public class GraphEditor extends JFrame {
 		menuAuthor.addActionListener(e -> showAuthor());
 		menuInstruction.addActionListener(e -> showInstructions());
 
+		menuSave.addActionListener(e -> saveGraphToFile());
+		menuLoad.addActionListener(e -> loadGraphFromFile());
+
 		menuGraph.setMnemonic(KeyEvent.VK_G);
 		menuGraph.add(menuNew);
 		menuGraph.add(menuShowExample);
@@ -95,6 +103,10 @@ public class GraphEditor extends JFrame {
 		menuGraph.add(menuNodeList);
 		menuGraph.add(menuEdgeList);
 		menuGraph.addSeparator();
+		menuGraph.add(menuSave);
+		menuGraph.add(menuLoad);
+		menuGraph.addSeparator();
+
 		menuGraph.add(menuExit);
 
 		menuHelp.setMnemonic(KeyEvent.VK_H);
@@ -104,6 +116,34 @@ public class GraphEditor extends JFrame {
 		menuBar.add(menuGraph);
 		menuBar.add(menuHelp);
 		setJMenuBar(menuBar);
+	}
+
+	private void saveGraphToFile() {
+		MooreGraph graph = panel.getGraph();
+
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Binary files", "bin", "BIN");
+		chooser.setFileFilter(filter);
+		chooser.setCurrentDirectory(new File("."));
+		int returnValue = chooser.showSaveDialog(this);
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			String fileName = chooser.getSelectedFile().getName();
+			MooreGraph.serialize(fileName, graph);
+		}
+	}
+
+	private void loadGraphFromFile() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Binary files", "bin", "BIN");
+		chooser.setFileFilter(filter);
+		chooser.setCurrentDirectory(new File("."));
+		int returnValue = chooser.showOpenDialog(this);
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			String fileName = chooser.getSelectedFile().getName();
+			MooreGraph graph = MooreGraph.deserialize(fileName);
+			panel.setGraph(graph);
+			panel.repaint();
+		}
 	}
 
 	private void setNewGraph() {
@@ -129,43 +169,9 @@ public class GraphEditor extends JFrame {
 	}
 
 	private void showBuiltInExample() {
-		MooreGraph graph = new MooreGraph();
-
-		MooreNode q0 = new MooreNode(-260, 0, "q0", "y0");
-		MooreNode q1 = new MooreNode(-20, -140, "q1", "y1");
-		MooreNode q2 = new MooreNode(-20, 140, "q2", "y1");
-		MooreNode q3 = new MooreNode(260, -140, "q3", "y1");
-		MooreNode q4 = new MooreNode(260, 140, "q4", "y1");
-
-		MooreEdge e1 = new MooreEdge(q0, q1, "z1", 0);
-		MooreEdge e2 = new MooreEdge(q0, q2, "z0", 0);
-		MooreEdge e3 = new MooreEdge(q1, q3, "z1", 50);
-		MooreEdge e4 = new MooreEdge(q1, q3, "z0", -50);
-		MooreEdge e5 = new MooreEdge(q3, q4, "z1", 0);
-		MooreEdge e6 = new MooreEdge(q4, q2, "z0", 0);
-		MooreEdge e7 = new MooreEdge(q2, q3, "z0", 50);
-		MooreEdge e8 = new MooreEdge(q3, q2, "z0", 50);
-		MooreEdge e9 = new MooreEdge(q2, q1, "z1", 0);
-		MooreEdge e10 = new MooreEdge(q4, q1, "z1", 0);
-
-		graph.addNode(q0);
-		graph.addNode(q1);
-		graph.addNode(q2);
-		graph.addNode(q3);
-		graph.addNode(q4);
-
-		graph.addEdge(e1);
-		graph.addEdge(e2);
-		graph.addEdge(e3);
-		graph.addEdge(e4);
-		graph.addEdge(e5);
-		graph.addEdge(e6);
-		graph.addEdge(e7);
-		graph.addEdge(e8);
-		graph.addEdge(e9);
-		graph.addEdge(e10);
-
-		panel.setGraph(graph);
+		MooreGraph graph = MooreGraph.deserialize("built-in-example.bin");
+			panel.setGraph(graph);
+			panel.repaint();
 	}
 
 }

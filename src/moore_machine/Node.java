@@ -13,9 +13,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
+import java.io.Serializable;
 
-public class Node {
+public class Node implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	protected double x;
 	protected double y;
 	protected int r = 40;

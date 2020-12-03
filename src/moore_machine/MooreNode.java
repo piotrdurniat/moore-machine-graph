@@ -14,6 +14,7 @@ import java.awt.FontMetrics;
 
 public class MooreNode extends Node {
 
+	private static final long serialVersionUID = 1L;
 	private String state;
 	private String output;
 

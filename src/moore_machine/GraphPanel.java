@@ -58,8 +58,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
         translateX = tx;
         translateY = ty;
-
-        System.out.println(getWidth());
     }
 
     protected void showGlobalPopupMenu(MouseEvent event) {

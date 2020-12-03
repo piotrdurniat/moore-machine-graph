@@ -13,10 +13,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.geom.QuadCurve2D;
+import java.io.Serializable;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-class Edge {
+class Edge implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     protected Node startNode;
     protected Node endNode;
 
