@@ -1,9 +1,6 @@
 package moore_machine;
 
 import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -16,12 +13,13 @@ public class GraphEditor extends JFrame {
 	private static final String APP_TITLE = "Moore machine graph editor";
 	private static final String APP_AUTHOR = "Autor: Piotr Durniat\n  Data: grudzień 2020";
 	private static final String APP_INSTRUCTION = "                  APP INSTRUCTIONS \n\n" + "Active keys:\n"
-			+ "   arrow keys -> translate view\n" + "   +/= -> zoom in\n" + "   -/_ -> zoom out\n"
-			+ "   SHIFT + arrow keys --> translate view faster\n\n" + "When mouse cursor is over a node:\n"
-			+ "   DEL   --> delete node\n" + "   +/=   --> increse node size\n" + "   -/_   --> decrese node size\n\n"
-			+ "Mouse actions:\n" + "   Left button drag --> translate view\n" + "   Scroll wheel --> scale view\n"
-			+ "   Right click --> create new node\n" + "When curson is over a node:\n"
-			+ "   Left button drag --> move node\n" + "   Right click --> delete node\n";
+			+ "   arrow keys   --> translate view\n" + "   +/=   --> zoom in\n" + "   -/_   --> zoom out\n"
+			+ "   SHIFT + arrow keys   --> translate view faster\n" + "   E   -> create new Edge\n\n"
+			+ "When mouse cursor is over a node:\n" + "   DEL   --> delete node\n" + "   +/=   --> increse node size\n"
+			+ "   -/_   --> decrese node size\n\n" + "Mouse actions:\n" + "   Left button drag --> translate view\n"
+			+ "   Scroll wheel --> scale view\n" + "   Right click --> show options popup menu\n"
+			+ "When curson is over a node:\n" + "   Left button drag --> move node\n"
+			+ "   Right click --> delete node\n";
 
 	private GraphPanel panel = new GraphPanel();
 
@@ -87,7 +85,7 @@ public class GraphEditor extends JFrame {
 	}
 
 	private void showEdgeList() {
-		// TODO  - node list
+		// TODO - node list
 		System.out.println("Edge list");
 	}
 
@@ -98,7 +96,6 @@ public class GraphEditor extends JFrame {
 	private void showInstructions() {
 		JOptionPane.showMessageDialog(this, APP_INSTRUCTION, APP_TITLE, JOptionPane.PLAIN_MESSAGE);
 	}
-
 
 	private void showBuiltInExample() {
 		MooreGraph graph = new MooreGraph();

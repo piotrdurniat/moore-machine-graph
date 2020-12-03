@@ -2,7 +2,11 @@ package moore_machine;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -45,6 +49,27 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     setFocusable(true);
     requestFocus();
     setBackground(Color.WHITE);
+  }
+
+  protected void showGlobalPopupMenu(MouseEvent event) {
+    JPopupMenu popup = new JPopupMenu();
+    JMenuItem addNodeMenuItem = new JMenuItem("Create new node");
+    JMenuItem addEdgeMenuItem = new JMenuItem("Create new edge");
+
+    addNodeMenuItem.addActionListener(e -> createNewNode(event.getX(), event.getY()));
+    addEdgeMenuItem.addActionListener(e -> addNewEdge());
+
+    popup.add(addNodeMenuItem);
+    popup.add(addEdgeMenuItem);
+    popup.show(event.getComponent(), event.getX(), event.getY());
+  }
+
+  public void createNewNode(int x, int y) {
+    String state = JOptionPane.showInputDialog("Enter node state value:");
+    String output = JOptionPane.showInputDialog("Enter node output value:");
+    MooreNode newNode = new MooreNode(x, y, state, output);
+    graph.addNode(newNode);
+    repaint();
   }
 
   public double getScale() {
@@ -140,11 +165,15 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         scaleView(scaleSpeed);
         break;
       case KeyEvent.VK_E:
-        edgeEditor.newEdge();
+        addNewEdge();
         break;
     }
 
     repaint();
+  }
+
+  private void addNewEdge() {
+    edgeEditor.newEdge();
   }
 
   @Override
@@ -238,6 +267,14 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     mouseX = event.getX();
     mouseY = event.getY();
     setMouseCursor();
+
+    if (event.getButton() == 3) {
+      if (nodeUnderCursor != null) {
+        // showNodePopupMenu(event, nodeUnderCursor);
+      } else {
+        showGlobalPopupMenu(event);
+      }
+    }
   }
 
   @Override
