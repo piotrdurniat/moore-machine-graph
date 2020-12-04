@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.geom.Point2D;
 
 public class MooreEdge extends Edge {
 
@@ -46,13 +47,15 @@ public class MooreEdge extends Edge {
 
         Font font = new Font("TimesRoman", Font.BOLD, 20);
 
-        int tx = (int) getPeakPos()[0];
-        int ty = (int) getPeakPos()[1];
+        Point2D.Double t = getPeakPos();
+
+        // int tx = (int) getPeakPos()[0];
+        // int ty = (int) getPeakPos()[1];
         FontMetrics metrics = g.getFontMetrics(font);
 
         g.setFont(font);
         g.setColor(Color.BLACK);
-        g.drawString(input, tx - metrics.stringWidth(input) / 2, ty + metrics.getAscent() / 2);
+        g.drawString(input,(int) (t.x - metrics.stringWidth(input) / 2),(int) (t.y + metrics.getAscent() / 2));
     }
 
     @Override

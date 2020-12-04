@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.geom.QuadCurve2D;
 import java.io.Serializable;
 import java.awt.BasicStroke;
@@ -62,42 +61,36 @@ class Edge implements Serializable {
         this.endNode = endNode;
     }
 
-    protected double[] getStartPoint() {
-        double[] s = getPeakPos();
-        double sx = s[0];
-        double sy = s[1];
-        double ex = startNode.getX();
-        double ey = startNode.getY();
-
-        return getIntersectWithCircle(sx, sy, ex, ey);
+    protected Point2D.Double getStartPoint() {
+        Point2D.Double s = getPeakPos();
+        Point2D.Double e = startNode.getPos();
+        return getIntersectWithCircle(s, e);
     }
 
-    protected double[] getEndPoint() {
-        double[] s = getPeakPos();
-        double sx = s[0];
-        double sy = s[1];
-        double ex = endNode.getX();
-        double ey = endNode.getY();
+    protected Point2D.Double getEndPoint() {
+        Point2D.Double s = getPeakPos();
+        Point2D.Double e = endNode.getPos();
 
-        return getIntersectWithCircle(sx, sy, ex, ey);
+        return getIntersectWithCircle(s, e);
     }
 
-    private double[] getIntersectWithCircle(double sx, double sy, double ex, double ey) {
-        double xDiff = ex - sx;
-        double yDiff = ey - sy;
+    private Point2D.Double getIntersectWithCircle(Point2D.Double s, Point2D.Double e) {
+        double xDiff = e.x - s.x;
+        double yDiff = e.y - s.y;
         int r = endNode.getR();
 
-        double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-        double x = (ex - (r * xDiff) / dist);
-        double y = (ey - (r * yDiff) / dist);
-        double[] point = { x, y };
-        return point;
+        double dist = s.distance(e);
+        double x = (e.x - (r * xDiff) / dist);
+        double y = (e.y - (r * yDiff) / dist);
+
+        return new Point2D.Double(x, y);
     }
 
-    boolean linePoint(double x1, double y1, double x2, double y2, double px, double py) {
-        double d1 = dist(px, py, x1, y1);
-        double d2 = dist(px, py, x2, y2);
-        double lineLen = dist(x1, y1, x2, y2);
+    boolean linePoint(Point2D.Double x, Point2D.Double y,Point2D.Double p) {
+        double d1 = p.distance(x);
+        double d2 = p.distance(y);
+        double lineLen = x.distance(y);
+
         double buffer = 0.2;
         if (d1 + d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
             return true;
@@ -106,48 +99,37 @@ class Edge implements Serializable {
     }
 
     private QuadCurve2D getCurve() {
-        double[] s = getStartPoint();
-        double[] e = getEndPoint();
-        double[] p = getPeakPos();
-        int sx = (int) s[0];
-        int sy = (int) s[1];
-        int ex = (int) e[0];
-        int ey = (int) e[1];
-
-        int px = (int) p[0];
-        int py = (int) p[1];
-
+        Point2D.Double s = getStartPoint();
+        Point2D.Double e = getEndPoint();
+        Point2D.Double p = getPeakPos();
         QuadCurve2D curve = new QuadCurve2D.Float();
 
-        curve.setCurve(sx, sy, px, py, ex, ey);
+        curve.setCurve(s.x, s.y, p.x, p.y, e.x, e.y);
 
         return curve;
     }
 
-    protected double[] getPeakPos() {
-        double sx = startNode.getX();
-        double sy = startNode.getY();
-        double ex = endNode.getX();
-        double ey = endNode.getY();
-        double angle = Math.atan2(ey - sy, ex - sx);
+    protected Point2D.Double getPeakPos() {
+        Point2D.Double s = startNode.getPos();
+        Point2D.Double e = endNode.getPos();
 
-        double[] middle = getMiddlePoint(sx, sy, ex, ey);
+        double angle = Math.atan2(e.y - s.y, e.x - s.x);
 
-        double peakX = middle[0] + curveHeight * Math.cos(angle - Math.PI / 2);
-        double peakY = middle[1] + curveHeight * Math.sin(angle - Math.PI / 2);
+        Point2D.Double middle = getMiddlePoint(s, e);
 
-        double[] peak = { peakX, peakY };
-        return peak;
+        double peakX = middle.x + curveHeight * Math.cos(angle - Math.PI / 2);
+        double peakY = middle.y + curveHeight * Math.sin(angle - Math.PI / 2);
+
+        return new Point2D.Double(peakX, peakY);
     }
 
-    protected double[] getMiddlePoint(double sx, double sy, double ex, double ey) {
-        double middleX = (sx + ex) / 2;
-        double middleY = (sy + ey) / 2;
-        double[] middle = { middleX, middleY };
-        return middle;
+    protected Point2D.Double getMiddlePoint(Point2D.Double s, Point2D.Double e) {
+        double middleX = (s.x + e.x) / 2;
+        double middleY = (s.y + e.y) / 2;
+        return new Point2D.Double(middleX, middleY);
     }
 
-    private void drawArrowHead(Graphics g, double x1, double y1, double x2, double y2) {
+    private void drawArrowHead(Graphics g, Point2D.Double s, Point2D.Double e) {
         Graphics2D g2d = (Graphics2D) g;
 
         Polygon arrowHead = new Polygon();
@@ -155,20 +137,14 @@ class Edge implements Serializable {
         arrowHead.addPoint(-5, -5);
         arrowHead.addPoint(5, -5);
 
-        double angle = Math.atan2(y2 - y1, x2 - x1);
-        g2d.translate(x2, y2);
+        double angle = Math.atan2(e.y - s.y, e.x - s.x);
+        g2d.translate(e.x, e.y);
         g2d.rotate((angle - Math.PI / 2d));
 
         g2d.fill(arrowHead);
 
         g2d.rotate(-(angle - Math.PI / 2d));
-        g2d.translate(-x2, -y2);
-    }
-
-    private double dist(double x1, double y1, double x2, double y2) {
-        double xDiff = x1 - x2;
-        double yDiff = y1 - y2;
-        return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+        g2d.translate(-e.x, -e.y);
     }
 
     void draw(Graphics g) {
@@ -176,19 +152,12 @@ class Edge implements Serializable {
 
         g.setColor(Color.BLACK);
 
-        double[] e = getEndPoint();
-        double[] p = getPeakPos();
-
-        int ex = (int) e[0];
-        int ey = (int) e[1];
-
-        int px = (int) p[0];
-        int py = (int) p[1];
-
+        Point2D.Double e = getEndPoint();
+        Point2D.Double p = getPeakPos();
         QuadCurve2D curve = getCurve();
         g2d.draw(curve);
 
-        drawArrowHead(g, px, py, ex, ey);
+        drawArrowHead(g, p, e);
 
         drawEnclosingRect(g);
     }
@@ -215,27 +184,23 @@ class Edge implements Serializable {
     }
 
     protected Polygon enclosingRect() {
-        double[] s = getStartPoint();
-        double[] e = getEndPoint();
-        int sx = (int) s[0];
-        int sy = (int) s[1];
-        int ex = (int) e[0];
-        int ey = (int) e[1];
+        Point2D.Double s = getStartPoint();
+        Point2D.Double e = getEndPoint();
 
         int distY = curveHeight;
 
         Polygon rect = new Polygon();
 
-        double angle = Math.atan2(ey - sy, ex - sx);
+        double angle = Math.atan2(e.y - s.y, e.x - s.x);
 
-        rect.addPoint(sx, sy);
-        rect.addPoint(ex, ey);
+        rect.addPoint((int)s.x,(int) s.y);
+        rect.addPoint((int)e.x,(int) e.y);
 
         int diffX = (int) (Math.cos(angle - Math.PI / 2) * distY);
         int diffY = (int) (Math.sin(angle - Math.PI / 2) * distY);
 
-        rect.addPoint(ex + diffX, ey + diffY);
-        rect.addPoint(sx + diffX, sy + diffY);
+        rect.addPoint((int)(e.x + diffX),(int) (e.y + diffY));
+        rect.addPoint((int)(s.x + diffX),(int) (s.y + diffY));
         return rect;
     }
 
@@ -243,11 +208,11 @@ class Edge implements Serializable {
         Polygon rect = enclosingRect();
 
         if (Math.abs(curveHeight) <= 3) {
-            double sx = startNode.getX();
-            double sy = startNode.getY();
-            double ex = endNode.getX();
-            double ey = endNode.getY();
-            mouseOver = linePoint(sx, sy, ex, ey, mx, my);
+
+            Point2D.Double s = startNode.getPos();
+            Point2D.Double e = endNode.getPos();
+
+            mouseOver = linePoint(s, e, new Point2D.Double(mx, my));
         } else {
             mouseOver = rect.contains(mx, my);
         }

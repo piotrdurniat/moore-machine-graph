@@ -14,34 +14,23 @@ import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.io.Serializable;
+import java.awt.geom.Point2D;
+
 
 public class Node implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	protected double x;
-	protected double y;
+
+	protected Point2D.Double pos;
 	protected int r = 40;
 	boolean mouseOver;
 
 	public Node(double x, double y) {
-		setX(x);
-		setY(y);
+		pos = new Point2D.Double(x, y);
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
+	public Point2D.Double getPos() {
+		return pos;
 	}
 
 	public int getR() {
@@ -53,12 +42,11 @@ public class Node implements Serializable {
 	}
 
 	public void move(double dx, double dy) {
-		setX(x + dx);
-		setY(y + dy);
+		pos.setLocation(pos.x + dx, pos.y + dy);
 	}
 
 	public boolean isMouseOver(int mx, int my) {
-		mouseOver = (x - mx) * (x - mx) + (y - my) * (y - my) <= r * r;
+		mouseOver = (pos.x - mx) * (pos.x - mx) + (pos.y - my) * (pos.y - my) <= r * r;
 		return mouseOver;
 	}
 
@@ -73,11 +61,11 @@ public class Node implements Serializable {
 			g2d.setStroke(new BasicStroke());
 		}
 
-		g.drawOval((int) x - r, (int) y - r, 2 * r, 2 * r);
+		g.drawOval((int) pos.x - r, (int) pos.y - r, 2 * r, 2 * r);
 	}
 
 	@Override
 	public String toString() {
-		return ("(x: " + x + ", y: " + y + ", r: " + r + ")");
+		return ("(x: " + pos.x + ", y: " + pos.y + ", r: " + r + ")");
 	}
 }

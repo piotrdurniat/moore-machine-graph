@@ -170,8 +170,8 @@ public class GraphEditor extends JFrame {
 
 	private void showBuiltInExample() {
 		MooreGraph graph = MooreGraph.deserialize("built-in-example.bin");
-			panel.setGraph(graph);
-			panel.repaint();
+		panel.setGraph(graph);
+		panel.repaint();
 	}
 
 }

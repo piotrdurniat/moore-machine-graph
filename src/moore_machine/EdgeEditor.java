@@ -62,8 +62,8 @@ public class EdgeEditor implements MouseMotionListener, MouseListener {
             int translateX = panel.getTranslateX();
             int translateY = panel.getTranslateY();
 
-            int x = (int) (startNode.getX() * scale + translateX);
-            int y = (int) (startNode.getY() * scale + translateY);
+            int x = (int) (startNode.getPos().x * scale + translateX);
+            int y = (int) (startNode.getPos().y * scale + translateY);
 
             g.drawLine(x, y, mouseX, mouseY);
         }
