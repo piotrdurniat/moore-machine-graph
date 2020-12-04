@@ -46,16 +46,12 @@ public class MooreEdge extends Edge {
         super.draw(g);
 
         Font font = new Font("TimesRoman", Font.BOLD, 20);
-
         Point2D.Double t = getPeakPos();
-
-        // int tx = (int) getPeakPos()[0];
-        // int ty = (int) getPeakPos()[1];
         FontMetrics metrics = g.getFontMetrics(font);
 
         g.setFont(font);
         g.setColor(Color.BLACK);
-        g.drawString(input,(int) (t.x - metrics.stringWidth(input) / 2),(int) (t.y + metrics.getAscent() / 2));
+        g.drawString(input, (int) (t.x - metrics.stringWidth(input) / 2), (int) (t.y + metrics.getAscent() / 2));
     }
 
     @Override

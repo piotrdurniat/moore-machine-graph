@@ -16,7 +16,6 @@ import java.awt.Stroke;
 import java.io.Serializable;
 import java.awt.geom.Point2D;
 
-
 public class Node implements Serializable {
 
 	private static final long serialVersionUID = 1L;

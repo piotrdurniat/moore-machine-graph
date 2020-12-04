@@ -86,7 +86,7 @@ class Edge implements Serializable {
         return new Point2D.Double(x, y);
     }
 
-    boolean linePoint(Point2D.Double x, Point2D.Double y,Point2D.Double p) {
+    boolean linePoint(Point2D.Double x, Point2D.Double y, Point2D.Double p) {
         double d1 = p.distance(x);
         double d2 = p.distance(y);
         double lineLen = x.distance(y);
@@ -183,24 +183,28 @@ class Edge implements Serializable {
         return startNode + "  ->  " + endNode;
     }
 
+    private int getCurveDirection() {
+        return (curveHeight >= 0) ? 1 : -1;
+    }
+
     protected Polygon enclosingRect() {
         Point2D.Double s = getStartPoint();
         Point2D.Double e = getEndPoint();
 
-        int distY = curveHeight;
+        double distY = getCurve().getFlatness() * getCurveDirection();
 
         Polygon rect = new Polygon();
 
         double angle = Math.atan2(e.y - s.y, e.x - s.x);
 
-        rect.addPoint((int)s.x,(int) s.y);
-        rect.addPoint((int)e.x,(int) e.y);
+        rect.addPoint((int) s.x, (int) s.y);
+        rect.addPoint((int) e.x, (int) e.y);
 
         int diffX = (int) (Math.cos(angle - Math.PI / 2) * distY);
         int diffY = (int) (Math.sin(angle - Math.PI / 2) * distY);
 
-        rect.addPoint((int)(e.x + diffX),(int) (e.y + diffY));
-        rect.addPoint((int)(s.x + diffX),(int) (s.y + diffY));
+        rect.addPoint((int) (e.x + diffX), (int) (e.y + diffY));
+        rect.addPoint((int) (s.x + diffX), (int) (s.y + diffY));
         return rect;
     }
 

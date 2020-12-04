@@ -91,23 +91,22 @@ public class MooreGraph implements Serializable {
     }
 
     public static void serialize(String fileName, MooreGraph graph) {
-		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
-			outputStream.writeObject(graph);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
-		}
-	}
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            outputStream.writeObject(graph);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-	public static MooreGraph deserialize(String fileName) {
-		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-			return (MooreGraph) inputStream.readObject();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
-		} catch (ClassNotFoundException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE );
+    public static MooreGraph deserialize(String fileName) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            return (MooreGraph) inputStream.readObject();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         return null;
-	}
-
+    }
 
 }
