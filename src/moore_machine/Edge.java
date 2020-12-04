@@ -12,10 +12,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.geom.QuadCurve2D;
 import java.io.Serializable;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
+import java.awt.geom.Point2D;
 
 class Edge implements Serializable {
 
@@ -103,12 +105,23 @@ class Edge implements Serializable {
         return false;
     }
 
-    private void drawArc(Graphics g, int sx, int sy, int px, int py, int ex, int ey) {
-        Graphics2D g2d = (Graphics2D) g;
-        QuadCurve2D q = new QuadCurve2D.Float();
+    private QuadCurve2D getCurve() {
+        double[] s = getStartPoint();
+        double[] e = getEndPoint();
+        double[] p = getPeakPos();
+        int sx = (int) s[0];
+        int sy = (int) s[1];
+        int ex = (int) e[0];
+        int ey = (int) e[1];
 
-        q.setCurve(sx, sy, px, py, ex, ey);
-        g2d.draw(q);
+        int px = (int) p[0];
+        int py = (int) p[1];
+
+        QuadCurve2D curve = new QuadCurve2D.Float();
+
+        curve.setCurve(sx, sy, px, py, ex, ey);
+
+        return curve;
     }
 
     protected double[] getPeakPos() {
@@ -159,20 +172,22 @@ class Edge implements Serializable {
     }
 
     void draw(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+
         g.setColor(Color.BLACK);
 
-        double[] s = getStartPoint();
         double[] e = getEndPoint();
         double[] p = getPeakPos();
-        int sx = (int) s[0];
-        int sy = (int) s[1];
+
         int ex = (int) e[0];
         int ey = (int) e[1];
 
         int px = (int) p[0];
         int py = (int) p[1];
 
-        drawArc(g, sx, sy, px, py, ex, ey);
+        QuadCurve2D curve = getCurve();
+        g2d.draw(curve);
+
         drawArrowHead(g, px, py, ex, ey);
 
         drawEnclosingRect(g);
