@@ -19,10 +19,9 @@ import java.awt.geom.Point2D;
 public class Node implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	protected Point2D.Double pos;
 	protected int r = 40;
-	boolean mouseOver;
+	private boolean mouseOver;
 
 	public Node(double x, double y) {
 		pos = new Point2D.Double(x, y);

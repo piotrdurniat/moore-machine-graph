@@ -23,10 +23,8 @@ class Edge implements Serializable {
     private static final long serialVersionUID = 1L;
     protected Node startNode;
     protected Node endNode;
-
     protected int curveHeight = 0;
-
-    boolean mouseOver = false;
+    private boolean mouseOver = false;
 
     Edge(Node startNode, Node endNode) {
         setStartNode(startNode);
